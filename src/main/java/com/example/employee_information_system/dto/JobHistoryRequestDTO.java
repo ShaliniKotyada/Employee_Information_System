@@ -2,24 +2,20 @@ package com.example.employee_information_system.dto;
 
 import java.time.LocalDate;
 
-import org.antlr.v4.runtime.misc.NotNull;
+
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 public class JobHistoryRequestDTO {
-    
-
-
-    @NotNull
-
+    @NotNull(message="Employee ID must not be null")
     private Long empId;
-
-    @NotNull
+    @NotNull(message="Job ID must not be null")
     private Long jobId;
-
-    @NotNull
       @JsonFormat(pattern = "yyyy-MM-dd")
+      @PastOrPresent(message="Start Date must not be of future")
+      @NotNull(message="Start date must not be null")
     private LocalDate startDate;
       @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;

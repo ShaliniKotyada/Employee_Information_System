@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.example.employee_information_system.dto.EmployeeResponseDTO;
@@ -22,6 +23,7 @@ public class EmployeeServiceImpl  implements EmployeeService{
     @Override
     public List<EmployeeResponseDTO> getEmployeesByJob(Long jobId){
        List<Employee> list= employeeRepository.findByJob_Id(jobId);
+       
         List<EmployeeResponseDTO> response=new ArrayList<>();
         for(Employee emp:list){
             EmployeeResponseDTO responseDto=new EmployeeResponseDTO(

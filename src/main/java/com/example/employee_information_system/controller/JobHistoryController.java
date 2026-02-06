@@ -12,12 +12,15 @@ import com.example.employee_information_system.dto.JobHistoryRequestDTO;
 import com.example.employee_information_system.dto.JobHistoryResponseDTO;
 import com.example.employee_information_system.entity.JobHistory;
 import com.example.employee_information_system.service.JobHistoryService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
-@RequestMapping("/api/jobhistory")
+@RequestMapping("/api")
 public class JobHistoryController {
     
     private final JobHistoryService jobHistoryService;
@@ -28,14 +31,14 @@ public class JobHistoryController {
     }
 
     // List of jobhistory by employee
-    @GetMapping("/{empId}")
+    @GetMapping("/jobhistory/{empId}")
     public List<JobHistoryResponseDTO> getHistory(@PathVariable Long empId){
         return jobHistoryService.getJobHistoryByEmployee(empId);
     }
 
     // Add a new Job hhistory
-    @PostMapping
-    public ResponseEntity<String> addJobHistory(@RequestBody JobHistoryRequestDTO request) {
+    @PostMapping("/jobhistory")
+    public ResponseEntity<String> addJobHistory(@Valid @RequestBody JobHistoryRequestDTO request) {
         //TODO: process POST request
         jobHistoryService.addJobHistory(request);
         return ResponseEntity.ok("Job History added successfully");
