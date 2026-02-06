@@ -9,6 +9,7 @@ import com.example.employee_information_system.dto.EmployeeResponseDTO;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,17 +38,29 @@ public class EmployeeController {
         @NotNull(message="Job Id must not be null")
         @Positive(message="Job Id can't be negative")
         Long jobId){
-        return ResponseEntity.ok(employeeService.getEmployeesByJob(jobId));
+            List<EmployeeResponseDTO> list=employeeService.getEmployeesByJob(jobId);
+            if(list.isEmpty()){
+                return ResponseEntity
+            .status(HttpStatus.NO_CONTENT)
+            .build();
+            }
+        return ResponseEntity.ok(list);
     }
 
 
     // get employees by deptId
     @GetMapping("/department/{deptId}")
-    public List<EmployeeResponseDTO> getByDepartment(@PathVariable 
+    public ResponseEntity<List<EmployeeResponseDTO>> getByDepartment(@PathVariable 
         @Positive(message="department Id must be positive")
         @NotNull(message="department Id must be not null")
         Long deptId){
-        return employeeService.getEmployeesByDepartment(deptId);
+            List<EmployeeResponseDTO> list=employeeService.getEmployeesByDepartment(deptId);
+            if(list.isEmpty()){
+                return ResponseEntity
+            .status(HttpStatus.NO_CONTENT)
+            .build();
+            }
+        return ResponseEntity.ok(list);
     }
 
     // get employee name that contains the string
@@ -70,7 +83,11 @@ public class EmployeeController {
         @NotNull(message="maximum range must be not null")
         @Positive(message="maximum range must be positive")
         double max){
-            return ResponseEntity.ok(employeeService.getBySalaryRange(min, max));
+            List<EmployeeResponseDTO> list=employeeService.getBySalaryRange(min, max);
+            if(list.isEmpty()){
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            }
+            return ResponseEntity.ok(list);
         }
     
     // Employees greater then the given salary range
@@ -79,7 +96,11 @@ public class EmployeeController {
         @NotNull(message="Year must not be null")
         @Positive(message="year must be positive")
         int years){
-        return ResponseEntity.ok(employeeService.getByExperienceGreaterThan(years));
+            List<EmployeeResponseDTO> list=employeeService.getByExperienceGreaterThan(years);
+            if(list.isEmpty()){
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            }
+        return ResponseEntity.ok(list);
     }
 
     // update salary by employee Id
