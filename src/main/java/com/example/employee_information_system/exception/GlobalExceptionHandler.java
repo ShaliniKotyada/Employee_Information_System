@@ -6,6 +6,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,5 +50,21 @@ public ResponseEntity<Map<String, String>> handleConstraintViolation(
 
     return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
 }
+
+
+@ExceptionHandler(MethodArgumentTypeMismatchException.class)
+public ResponseEntity<Map<String, String>> handleTypeMismatch(
+        MethodArgumentTypeMismatchException ex) {
+
+    Map<String, String> error = new HashMap<>();
+
+    error.put(
+        ex.getName(),
+        "Invalid value. Expected type: " + ex.getRequiredType().getSimpleName()
+    );
+
+    return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+}
+
 }
 
