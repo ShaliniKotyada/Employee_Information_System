@@ -11,94 +11,54 @@ import com.example.employee_information_system.dto.EmployeeResponseDTO;
 import com.example.employee_information_system.entity.Employee;
 import com.example.employee_information_system.repository.EmployeeRepository;
 import com.example.employee_information_system.service.EmployeeService;
+import com.example.employee_information_system.mapper.EmployeeMapper;
 
 @Service
 public class EmployeeServiceImpl  implements EmployeeService{
-    private final EmployeeRepository employeeRepository;
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository){
+    private final EmployeeRepository employeeRepository;
+    private final EmployeeMapper employeeMapper;
+
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository,
+    EmployeeMapper employeeMapper
+    )
+    {
         this.employeeRepository= employeeRepository;
+        this.employeeMapper= employeeMapper;
     }
+    
 
     @Override
     public List<EmployeeResponseDTO> getEmployeesByJob(Long jobId){
-       List<Employee> list= employeeRepository.findByJob_Id(jobId);
+       return employeeMapper.toDTOList(employeeRepository.findByJob_Id(jobId));
        
-        List<EmployeeResponseDTO> response=new ArrayList<>();
-        for(Employee emp:list){
-            EmployeeResponseDTO responseDto=new EmployeeResponseDTO(
-                emp.getId(),emp.getName(),emp.getJob().getId(),emp.getDateOfJoining(),
-                emp.getDept().getId(),emp.getSalary()
-            );
-            response.add(responseDto);
-
-        }
-        return response;
+       
     }
 
     @Override
     public List<EmployeeResponseDTO> getEmployeesByDepartment(Long deptId){
-       List<Employee> list=employeeRepository.findByDept_Id(deptId);
-       List<EmployeeResponseDTO> response=new ArrayList<>();
-        for(Employee emp:list){
-            EmployeeResponseDTO responseDto=new EmployeeResponseDTO(
-                emp.getId(),emp.getName(),emp.getJob().getId(),emp.getDateOfJoining(),
-                emp.getDept().getId(),emp.getSalary()
-            );
-            response.add(responseDto);
-
-        }
-        return response;
+       return employeeMapper.toDTOList(employeeRepository.findByDept_Id(deptId));
+       
     }
     
 
     @Override
     public List<EmployeeResponseDTO> searchByName(String name) {
         // TODO
-        List<Employee> list=employeeRepository.findByNameContainingIgnoreCase(name);
-        List<EmployeeResponseDTO> response=new ArrayList<>();
-        for(Employee emp:list){
-            EmployeeResponseDTO responseDto=new EmployeeResponseDTO(
-                emp.getId(),emp.getName(),emp.getJob().getId(),emp.getDateOfJoining(),
-                emp.getDept().getId(),emp.getSalary()
-            );
-            response.add(responseDto);
-
-        }
-        return response;
+        return employeeMapper.toDTOList(employeeRepository.findByNameContainingIgnoreCase(name));
     }
 
     @Override
     public List<EmployeeResponseDTO> getBySalaryRange(double min, double max) {
         // TODO
-        List<Employee> list=employeeRepository.findBySalaryBetween(min, max);
-         List<EmployeeResponseDTO> response=new ArrayList<>();
-        for(Employee emp:list){
-            EmployeeResponseDTO responseDto=new EmployeeResponseDTO(
-                emp.getId(),emp.getName(),emp.getJob().getId(),emp.getDateOfJoining(),
-                emp.getDept().getId(),emp.getSalary()
-            );
-            response.add(responseDto);
-
-        }
-        return response;
+        return employeeMapper.toDTOList(employeeRepository.findBySalaryBetween(min, max));
     }
 
     @Override
     public List<EmployeeResponseDTO> getByExperienceGreaterThan(int years) {
         // TODO
         LocalDate date= LocalDate.now().minusYears(years);
-        List<Employee> list=employeeRepository.findByDateOfJoiningBefore(date);
-         List<EmployeeResponseDTO> response=new ArrayList<>();
-        for(Employee emp:list){
-            EmployeeResponseDTO responseDto=new EmployeeResponseDTO(
-                emp.getId(),emp.getName(),emp.getJob().getId(),emp.getDateOfJoining(),
-                emp.getDept().getId(),emp.getSalary()
-            );
-            response.add(responseDto);
-
-        }
-        return response;
+        return employeeMapper.toDTOList(employeeRepository.findByDateOfJoiningBefore(date));
     }
 
     @Override

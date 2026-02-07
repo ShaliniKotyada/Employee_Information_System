@@ -14,6 +14,8 @@ import com.example.employee_information_system.repository.EmployeeRepository;
 import com.example.employee_information_system.repository.JobHistoryRepository;
 import com.example.employee_information_system.repository.JobRepository;
 import com.example.employee_information_system.service.JobHistoryService;
+import com.example.employee_information_system.mapper.JobHistoryMapper;
+
 
 @Service
 public class JobHistoryServiceImpl implements JobHistoryService{
@@ -21,28 +23,21 @@ public class JobHistoryServiceImpl implements JobHistoryService{
     private final JobHistoryRepository historyRepository;
     private final EmployeeRepository employeeRepository;
     private final JobRepository jobRepository;
+    private final JobHistoryMapper jobHistoryMapper;
 
     public JobHistoryServiceImpl( JobHistoryRepository historyRepository,
         EmployeeRepository employeeRepository,
-        JobRepository jobRepository){
+        JobRepository jobRepository,JobHistoryMapper jobHistoryMapper){
             this.historyRepository = historyRepository;
             this.employeeRepository= employeeRepository;
             this.jobRepository= jobRepository;
+            this.jobHistoryMapper= jobHistoryMapper;
         }
 
         @Override
         public List<JobHistoryResponseDTO> getJobHistoryByEmployee(Long empId){
 
-            List<JobHistory> list=historyRepository.findByEmployee_Id(empId);
-            List<JobHistoryResponseDTO> response= new ArrayList<>();
-            for(JobHistory jobHistory: list){
-                JobHistoryResponseDTO responseDto = new JobHistoryResponseDTO(
-                    jobHistory.getId(), jobHistory.getEmployee().getId(),
-                    jobHistory.getJob().getId() , jobHistory.getStartDate(), 
-                    jobHistory.getEndDate());
-                    response.add(responseDto);
-            }
-            return response;
+           return jobHistoryMapper.toDTOList(historyRepository.findByEmployee_Id(empId));
 
         }
 
@@ -55,11 +50,16 @@ public class JobHistoryServiceImpl implements JobHistoryService{
        Job job= jobRepository.findById(request.getJobId())
        .orElseThrow(()-> new RuntimeException("Job not found"));
 
-       JobHistory history= new JobHistory();
-       history.setEmployee(employee);
-       history.setJob(job);
-       history.setStartDate(request.getStartDate());
-       history.setEndDate(request.getEndDate());
+    //    JobHistory history= new JobHistory();
+    //    history.setEmployee(employee);
+    //    history.setJob(job);
+    //    history.setStartDate(request.getStartDate());
+    //    history.setEndDate(request.getEndDate());
+        
+       JobHistory history = jobHistoryMapper.toEntity(request);
+
+        history.setEmployee(employee);
+        history.setJob(job);
 
        historyRepository.save(history);
     }

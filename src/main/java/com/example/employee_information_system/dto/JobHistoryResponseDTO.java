@@ -7,14 +7,14 @@ public class JobHistoryResponseDTO {
     private long id;
     private long jobId;
     private long empId;
-    private LocalDate starDate;
+    private LocalDate startDate;
     private LocalDate endDate;
 
-    public JobHistoryResponseDTO(long id, long jobId, long empId, LocalDate starDate, LocalDate endDate) {
+    public JobHistoryResponseDTO(long id, long jobId, long empId, LocalDate startDate, LocalDate endDate) {
         this.id = id;
         this.jobId = jobId;
         this.empId = empId;
-        this.starDate = starDate;
+        this.startDate = startDate;
         this.endDate = endDate;
     }
 
@@ -42,12 +42,12 @@ public class JobHistoryResponseDTO {
         this.empId = empId;
     }
 
-    public LocalDate getStarDate() {
-        return starDate;
+    public LocalDate getStartDate() {
+        return startDate;
     }
 
-    public void setStarDate(LocalDate starDate) {
-        this.starDate = starDate;
+    public void setStarDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
 
     public LocalDate getEndDate() {
